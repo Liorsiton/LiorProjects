@@ -89,7 +89,7 @@ public class Order {
 
 	@Override
 	public String toString() {
-		return "Order [id=" + id + "name=" + guestName + ", TelNumber=" + TelNumber + ", timeOfOrder=" + timeOfOrder +"guestsNumber=" + guestsNumber + "]";
+		return "Order [id= " + id + ",name= " + guestName + ",TelNumber= " + TelNumber + ", timeOfOrder= " + timeOfOrder +",guestsNumber= " + guestsNumber + "]";
 	}
 
 	public int getId() {

@@ -7,11 +7,13 @@ import java.util.Map;
 
 import com.lior.order.TIMEOFDAY;
 import com.lior.order.TimeOfOrder;
+import com.lior.resturant.ResturantImpl;
 
 public class Table {
 	
 	private int id;
 	private int size;		
+	private ResturantImpl rest;
 	private Map<Table,TimeOfOrder> tableStatus;
 	
 	
@@ -50,6 +52,14 @@ public class Table {
 	}
 
 
+
+	public ResturantImpl getRest() {
+		return rest;
+	}
+
+	public void setRest(ResturantImpl rest) {
+		this.rest = rest;
+	}
 
 	@Override
 	public String toString() {

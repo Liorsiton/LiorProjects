@@ -12,6 +12,7 @@ public interface Resturant {
 	 boolean addOrder(Order order , TimeOfOrder too);
 	 boolean cancelOrder(Order order , TimeOfOrder too);
 	 void init();
+	 
 	
 
 }

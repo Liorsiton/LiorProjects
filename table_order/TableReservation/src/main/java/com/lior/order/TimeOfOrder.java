@@ -101,6 +101,11 @@ public TIMEOFDAY getTimeOfDay() {
 		}
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "TimeOfOrder [timeOfDay= " + timeOfDay + ", date= " + date + "]";
+	}
 	
 	 
 	

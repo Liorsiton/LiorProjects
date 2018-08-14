@@ -23,7 +23,7 @@ public class ResturantImpl implements Resturant {
 	private Map<Table ,TimeOfOrder> tableStatus = new HashMap<>();
 	private int capacity;
 	private String name;
-
+    private int id;
 	
 	public ResturantImpl( int capacity ,String name){		
 		this.capacity = capacity;
@@ -34,6 +34,30 @@ public class ResturantImpl implements Resturant {
 	}
 	
 	
+	public ResturantImpl (String name){
+		this.name = name;
+	}
+	
+	
+	
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	
+	
+
+	public int getId() {
+		return id;
+	}
+
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
 	@Override
 	public void init() {
 		Table table1 = new Table(1,2);
@@ -98,6 +122,11 @@ public boolean addOrder(Order order , TimeOfOrder too){
 		return false;
 
 	}
+  	
+  	
+  	public String getName(){
+  		return this.name;
+  	}
 		
 	
 		
