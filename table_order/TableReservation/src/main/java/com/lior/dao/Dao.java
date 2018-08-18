@@ -6,6 +6,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,16 +31,17 @@ public class Dao {
 	private final static String createResturant = "insert into resturant (name) values(?)";
 	private final static String deleteResturnt = "delete from resturant where id =? ";
 	private final static String createTimeOfOrder = "insert into tod(order_time,order_date) values(?,?)";
-	private final static String getTimeOfOrder = "select id from tod where order_time =? and order_date =?";
+	private final static String getTimeOfOrder = "select id  from tod where order_time = ? and order_date =? ";
 	private final static String deleteTimeOfOrder = "delete from tod where id =?";
-	private final static String createTable = "insert into table_in_resturant (id,size,resturant)  values(?,?,?)";
+	private final static String createTable = "insert into table_in_resturant(table_number,size,resturant)  values(?,?,?)";
+	private final static String updateTable = "update table_in_resturant set order_time = ? where id = ? ";
 	private final static String getResturantId = "select id from resturant where name = ?";
-	private final static String getTableId = "select id from table_in_resturant where id = ?";
+	private final static String getTableIdbyOrderParams = "select id, table_number,size from table_in_resturant where size = ? and resturant = ? and (order_time <> ? or order_time is null)";
 	private final static String deleteTable = "delete from table_in_resturant where id =? ";
 	private final static String createOrder = "insert into orders (order_time,people_number,order_name ,telephone_number) values (?,?,?,?) ";
-	private final static String getOrder = "select id from orders where order_name = ? and telephone_number = ?";
+	private final static String getOrder = "select id,order_time from orders where order_name = ? and telephone_number = ?";
 	private final static String deleteOrder = "delete from orders where id =? ";
-
+	private final static String getallFreeTablesInResturantInTF = "select * from table_in_resturant where resturant = ? and order_time<> ? ";
 	public Connection getCon() {
 		Connection con = null;
 		try {
@@ -92,11 +96,36 @@ public class Dao {
 			ps.setString(3, order.getName());
 			ps.setString(4, order.getTelNumber());
 			status = ps.executeUpdate();
+			updateTable(order) ;
 			
 		}
 		return status;
 	}
 	
+	private void updateTable(Order order) throws SQLException {
+		Table choosen;	
+		List<Table> tables = getTableByOrderParams(order);
+		if(tables.isEmpty()){
+			logger.debug("There is no free table in resturan {} in time {} and date {}",order.getRest().getName(),order.getTimeOfOrder().getTimeOfDay(),order.getTimeOfOrder().getDate());	
+			return;
+		}
+		choosen = tables.get(0);
+			
+		int status = 0;
+		Connection con = getCon();
+		try (PreparedStatement ps = con.prepareStatement(updateTable)) {
+			int todToDB =getTod(order.getTimeOfOrder());
+			if(todToDB ==0){
+				createTod(order.getTimeOfOrder());
+				todToDB =getTod(order.getTimeOfOrder());
+			}
+			ps.setInt(1, todToDB);
+			ps.setInt(2, choosen.getId());
+			
+		}
+	}
+
+
 	public int getOrder(Order order) throws SQLException {
 		int id = 0;
 		Connection con = getCon();
@@ -128,11 +157,11 @@ public class Dao {
 	}
 	
 	
-	public int createTableInResturant(Table table) throws SQLException {
+	public int createTableInResturant(Table table) throws SQLException {		
 		int status = 0;
 		Connection con = getCon();
 		try (PreparedStatement ps = con.prepareStatement(createTable)) {			
-			ps.setInt(1, table.getId());			
+			ps.setInt(1, table.getTableNumber());			
 			ps.setInt(2, table.getSize());
 			int restID = getResturantByName(table.getRest().getName());
 			if(restID != 0){
@@ -165,20 +194,28 @@ public class Dao {
 		
 	}
 	
-	public int getTable(Table table) throws SQLException {
-		int id = 0;
+	public List<Table> getTableByOrderParams(Order order) throws SQLException {
+		List<Table> tables = new ArrayList<>();
 		Connection con = getCon();
-		try (PreparedStatement ps = con.prepareStatement(getTableId)) {
-			ps.setInt(1, table.getId());
+		try (PreparedStatement ps = con.prepareStatement(getTableIdbyOrderParams)) {
+			
+			ps.setInt(1, order.getGuestsNumber());
+			ps.setInt(2, getResturantByName(order.getRest().getName()));
+			ps.setInt(3, getTod(order.getTimeOfOrder()));
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				id = rs.getInt(1);
+//				TimeOfOrder timeOfOrder = new TimeOfOrder(rs.getInt(3), rs.getDate(4).toLocalDate());
+			tables.add(new Table(rs.getInt(1),rs.getInt(2),rs.getInt(3)));
 			}
 		}
 
-		return id;
+		return tables;
 		
 	}
+	
+
+		
+	
 	
 	
 	public int getTod(TimeOfOrder timeOfOrder) throws SQLException {
@@ -211,17 +248,17 @@ public class Dao {
 		return status;
 	}
 	
-	public int deleteTable(Table table) throws SQLException {
-		int status = 0;
-		Connection con = getCon();
-		try (PreparedStatement ps = con.prepareStatement(deleteTable)) {
-			int tableID = getTable(table);
-			ps.setInt(1, tableID);
-			status = ps.executeUpdate();
-			
-		}
-		return status;
-	}
+//	public int deleteTable(Table table) throws SQLException {
+//		int status = 0;
+//		Connection con = getCon();
+//		try (PreparedStatement ps = con.prepareStatement(deleteTable)) {
+//			int tableID = getTable(table);
+//			ps.setInt(1, tableID);
+//			status = ps.executeUpdate();
+//			
+//		}
+//		return status;
+//	}
 	
 	public int deleteTod(TimeOfOrder timeOfOrder) throws SQLException {
 		int status = 0;
@@ -240,5 +277,8 @@ public class Dao {
 
 	private int getTod(TIMEOFDAY timeOfDay) {
 	    return timeOfDay.getTime();
+	    
+	    
+	    
 	}
 }

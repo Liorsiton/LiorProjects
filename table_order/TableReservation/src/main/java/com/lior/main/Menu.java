@@ -45,7 +45,7 @@ public class Menu {
 		LocalDate dateOfOrder = LocalDate.of(year, month, day);
 		TIMEOFDAY timeOfDay = chooseHour();
 		timeOfOrder = new TimeOfOrder(timeOfDay , dateOfOrder);
-		order = new Order(id , name , tel , timeOfOrder ,guestsNumber );		
+//		order = new Order(id , name , tel , timeOfOrder ,guestsNumber );		
 	    logger.debug("order is {}",order);
 		Resturant rest = new ResturantImpl(50,"mamaia");
 		rest.init();

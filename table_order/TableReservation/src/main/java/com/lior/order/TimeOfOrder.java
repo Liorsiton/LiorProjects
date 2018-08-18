@@ -12,6 +12,7 @@ import com.lior.resturant.ResturantImpl;
 public class TimeOfOrder {
 	private static Logger logger = LogManager.getLogger(TimeOfOrder.class);
 	private TIMEOFDAY timeOfDay;
+	private int timeOfDayInt;
 	private LocalDate date;	
 	private Map<TIMEOFDAY ,LocalDate> orders  = new HashMap<>();	
 	
@@ -23,6 +24,12 @@ public TimeOfOrder(TIMEOFDAY timeOfDay, LocalDate date) {
 		this.timeOfDay = timeOfDay;
 		this.date = date;
 	}
+
+public TimeOfOrder(int timeOfDay, LocalDate date) {
+	
+	this.timeOfDayInt = timeOfDay;
+	this.date = date;
+}
 
 public TimeOfOrder(){}
 
@@ -45,7 +52,17 @@ public TIMEOFDAY getTimeOfDay() {
 	public void setDate(LocalDate date) {
 		this.date = date;
 	}
+	
+	
 
+
+	public int getTimeOfDayInt() {
+		return timeOfDayInt;
+	}
+
+	public void setTimeOfDayInt(int timeOfDayInt) {
+		this.timeOfDayInt = timeOfDayInt;
+	}
 
 	/*
  * this method set order as occupied on time and date */
@@ -104,7 +121,7 @@ public TIMEOFDAY getTimeOfDay() {
 
 	@Override
 	public String toString() {
-		return "TimeOfOrder [timeOfDay= " + timeOfDay + ", date= " + date + "]";
+		return "TimeOfOrder [timeOfDay= " + timeOfDayInt + ", date= " + date + "]";
 	}
 	
 	 

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.lior.resturant.ResturantImpl;
 import com.lior.table.Table;
 
 public class Order {
@@ -17,16 +18,18 @@ public class Order {
 	private TimeOfOrder timeOfOrder;
 	private int guestsNumber;
 	private Table table;
+	private ResturantImpl rest;
 	
 	
 	
 	
-	public Order(int id ,String name, String telNumber, TimeOfOrder timeOfOrder,int guestsNumber ) {	
+	public Order(int id ,String name, String telNumber, TimeOfOrder timeOfOrder,int guestsNumber ,ResturantImpl rest) {	
 		this.id = id;
 		this.guestName = name;
 		TelNumber = telNumber;
 		this.timeOfOrder = timeOfOrder;
 		this.guestsNumber = guestsNumber;
+		this.rest = rest;
 	}
 	
 	public boolean setOrder(TIMEOFDAY tod , LocalDate date){
@@ -83,13 +86,20 @@ public class Order {
 	public void setGuestsNumber(int guestsNumber) {
 		this.guestsNumber = guestsNumber;
 	}
+	
+	
+	
+	public ResturantImpl getRest() {
+		return rest;
+	}
 
-
-
+	public void setRest(ResturantImpl rest) {
+		this.rest = rest;
+	}
 
 	@Override
 	public String toString() {
-		return "Order [id= " + id + ",name= " + guestName + ",TelNumber= " + TelNumber + ", timeOfOrder= " + timeOfOrder +",guestsNumber= " + guestsNumber + "]";
+		return "Order [id= " + id + ",name= " + guestName + ",TelNumber= " + TelNumber + ", timeOfOrder= " + timeOfOrder +",guestsNumber= " + guestsNumber + "Resturan= " + rest +"]";
 	}
 
 	public int getId() {
