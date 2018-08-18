@@ -55,18 +55,16 @@ FOREIGN KEY (table_to_order) REFERENCES table_in_resturant(id)
 
 insert into resturant (name) values ('mamaia');
 
-insert into table_in_resturant values(1,4,null,1);
+insert into table_in_resturant(table_number,size,resturant) values(1,4,1);
 
-insert into table_in_resturant values(2,4,null,1);
+insert into table_in_resturant(table_number,size,resturant) values(2,4,1);
 
-insert into table_in_resturant values(3,4,null,1);
+insert into table_in_resturant(table_number,size,resturant) values(3,6,1);
 
-insert into table_in_resturant values(4,6,null,1);
-insert into table_in_resturant values(5,4,null,1);
+insert into table_in_resturant(table_number,size,resturant) values(4,4,1);
 
+insert into table_in_resturant(table_number,size,resturant) values(5,4,1);
 
+insert into table_in_resturant(table_number,size,resturant) values(6,4,1);
 
-insert into table_in_resturant values(6,4,null,1);
-
-insert into table_in_resturant values(7,8,null,1);
-
+insert into table_in_resturant(table_number,size,resturant) values(7,8,1);
